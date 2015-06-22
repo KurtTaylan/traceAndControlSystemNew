@@ -21,7 +21,7 @@ public class PersonServiceImpl implements PersonService {
 		this.personDao = personDao;
 	}
 	@Transactional
-	public List<Person> listPersonsByTribeNumber(String tribeNumber) {
+	public List<Person> listPersonsByTribeNumber(Tribe tribeNumber) {
 		
 		return getPersonDao().listPersonsByTribeNumber(tribeNumber);
 	}

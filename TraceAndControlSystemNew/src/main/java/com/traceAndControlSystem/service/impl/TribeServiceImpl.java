@@ -12,6 +12,15 @@ import com.traceAndControlSystem.service.TribeService;
 public class TribeServiceImpl implements TribeService {
 	
 	private TribeDao tribeDao;
+	private Integer numberOfPeople;
+
+	public Integer getNumberOfPeople() {
+		return numberOfPeople;
+	}
+
+	public void setNumberOfPeople(Integer numberOfPeople) {
+		this.numberOfPeople = numberOfPeople;
+	}
 
 	public TribeDao getTribeDao() {
 		return tribeDao;
@@ -21,7 +30,7 @@ public class TribeServiceImpl implements TribeService {
 		this.tribeDao = tribeDao;
 	}
 	@Transactional
-	public List<Person> listPersonsByTribeNumber(String tribeNumber) {
+	public List<Person> listPersonsByTribeNumber(Integer tribeNumber) {
 		
 		return getTribeDao().listPersonsByTribeNumber(tribeNumber);
 	}
@@ -39,6 +48,12 @@ public class TribeServiceImpl implements TribeService {
 	public List<Tribe> listTribe() {
 		
 		return getTribeDao().listTribe();
+	}
+	
+	public int numberOfTribe(){
+		List<Tribe> list = listTribe();
+		setNumberOfPeople(list.size());
+		return list.size();
 	}
 
 }

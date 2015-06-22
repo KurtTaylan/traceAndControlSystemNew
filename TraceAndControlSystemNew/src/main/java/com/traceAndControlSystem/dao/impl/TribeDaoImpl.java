@@ -14,11 +14,16 @@ public class TribeDaoImpl implements TribeDao{
 	
 	private SessionFactory sessionFactory;
 
-	@SuppressWarnings("unchecked")
-	public List<Person> listPersonsByTribeNumber(String tribeNumber) {
+	
+	public List<Person> listPersonsByTribeNumber(Integer tribeNumber) {
+		
 		Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Tribe.class);
-        criteria.add(Restrictions.eq("personList",tribeNumber));
-        return (List<Person>)criteria.list();
+        criteria.add(Restrictions.eq("id",tribeNumber));
+        
+        Tribe tribe = (Tribe)criteria.uniqueResult();
+        List<Person> pl = tribe.getPersonList();
+        
+        return pl;
 	}
 
 	public void savePerson(List<Person> person) {

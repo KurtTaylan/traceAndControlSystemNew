@@ -15,7 +15,7 @@ public class PersonDaoImpl implements PersonDao {
 	private SessionFactory sessionFactory;
 	
 	@SuppressWarnings("unchecked")
-	public List<Person> listPersonsByTribeNumber(String tribeNumber) {
+	public List<Person> listPersonsByTribeNumber(Tribe tribeNumber) {
 		Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Person.class);
         criteria.add(Restrictions.eq("tribe",tribeNumber));
         return (List<Person>)criteria.list();

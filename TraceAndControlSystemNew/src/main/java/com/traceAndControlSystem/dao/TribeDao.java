@@ -6,7 +6,7 @@ import com.traceAndControlSystem.model.Person;
 import com.traceAndControlSystem.model.Tribe;
 
 public interface TribeDao {
-	List<Person> listPersonsByTribeNumber(String tribeNumber);
+	List<Person> listPersonsByTribeNumber(Integer tribeNumber);
 	 
 	 void savePerson(List<Person> person);
 	 

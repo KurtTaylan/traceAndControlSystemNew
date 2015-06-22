@@ -7,7 +7,7 @@ import com.traceAndControlSystem.model.Tribe;
 
 public interface PersonService {
 	
-	 	List<Person> listPersonsByTribeNumber(String tribeNumber);
+	 	List<Person> listPersonsByTribeNumber(Tribe tribeNumber);
 	    
 	    Person findPersonById(String Id);
 	    
