@@ -50,10 +50,10 @@ public class TribeServiceImpl implements TribeService {
 		return getTribeDao().listTribe();
 	}
 	
-	public int numberOfTribe(){
-		List<Tribe> list = listTribe();
-		setNumberOfPeople(list.size());
-		return list.size();
+	@Transactional
+	public int getNumberOfTribeMember(String tribeName) {
+		
+		return getTribeDao().getNumberOfTribeMember(tribeName);
 	}
 
 }

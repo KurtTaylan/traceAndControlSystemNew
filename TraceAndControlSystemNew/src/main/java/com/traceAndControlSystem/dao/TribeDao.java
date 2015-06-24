@@ -13,5 +13,7 @@ public interface TribeDao {
 	 void saveTribe(Tribe tribe);
 	 
 	 List<Tribe> listTribe();
+	 
+	 int getNumberOfTribeMember(String tribeName);
 
 }

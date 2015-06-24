@@ -14,5 +14,7 @@ public interface TribeService {
 	 void saveTribe(Tribe tribe);
 	 
 	 List<Tribe> listTribe();
+	 
+	 int getNumberOfTribeMember(String tribeName);
 
 }
