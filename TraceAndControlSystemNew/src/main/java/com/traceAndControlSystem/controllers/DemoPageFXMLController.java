@@ -1,5 +1,6 @@
 package com.traceAndControlSystem.controllers;
 
+import java.awt.Font;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ import javafx.scene.input.PickResult;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -49,7 +51,18 @@ public class DemoPageFXMLController implements Initializable {
 	private int mapTick;
 	private Tribe tribe;
 	private Tribe selectedTribe;
+	private Tribe specialTribe;
+
+	public Tribe getSpecialTribe() {
+		return specialTribe;
+	}
+
+	public void setSpecialTribe(Tribe specialTribe) {
+		this.specialTribe = specialTribe;
+	}
+
 	private Stage stage;
+	private String addressOfImage;
 
 	public Tribe getSelectedTribe() {
 		return selectedTribe;
@@ -81,11 +94,11 @@ public class DemoPageFXMLController implements Initializable {
 	@FXML
 	TableView<Tribe> tribe_tableView;
 	@FXML
-	TableColumn<Tribe, String> tribeName,address;
+	TableColumn<Tribe, String> tribeName, address;
 	@FXML
 	TableColumn<Tribe, Integer> numberOfPeople;
 	@FXML
-	Label selectedTribeName,errorLabel;
+	Label selectedTribeName, errorLabel;
 	@FXML
 	BorderPane borderPane;
 	@FXML
@@ -215,76 +228,108 @@ public class DemoPageFXMLController implements Initializable {
 
 	private void initTableViews() {
 
-		tribe_tableView.setRowFactory(cb -> {
-			TableRow<Tribe> row = new TableRow<>();
-			ImageView image = createPin();
-			Label imageLabel = new Label();
-			
-			row.setOnContextMenuRequested(ev -> {
-				System.out.println("Right click!");
-
-			});
-			row.setOnDragDetected(ev -> {
-
-				String name = row.getItem().getName();
-				String rowInfo = row.getText();
-				Dragboard db = row.startDragAndDrop(TransferMode.COPY);
-				ClipboardContent content = new ClipboardContent();
-				content.putString(rowInfo);
-				db.setContent(content);
-
-				System.out.println("Row drag detected " + name);
-
-				
-				imageLabel.setText(name);
-				
-				image.toFront();
-				image.setVisible(true);
-				
-				imageLabel.setTranslateX(image.getX()+14);
-				imageLabel.setTranslateY(image.getY() - 15);
-				image.setX(ev.getSceneX() - 40);
-				image.setY(ev.getSceneY() - 20);
-				
-				
-				image.setOnMouseDragged(evt -> {
-					image.setX(evt.getSceneX() - 40);
-					image.setY(evt.getSceneY() - 20);
+		tribe_tableView
+				.setRowFactory(cb -> {
+					TableRow<Tribe> row = new TableRow<>();
+					setSpecialTribe(getSelectedTribe());
+					ImageView image = createPin();
+					Label imageLabel = new Label();
 					
-					//imageLabel.setX(evt.getSceneX() - 40);
-					//imageLabel.setY(evt.getSceneY() - 20);
 					
-					imageLabel.setTranslateX(image.getX()+14);
-					imageLabel.setTranslateY(image.getY() - 15);
-				});
-				
-				image.setOnContextMenuRequested(e -> {
-					System.out.println("Right click!");
-					destroyPin(image,imageLabel);
-				});
-				
-				image.setOnMouseEntered(e -> {
-					errorLabel.setText(row.getItem().getName()+" imlecini kaldýrmak için SAÐ MOUSE tuþuna basýnýz!");
-				});
-				image.setOnMouseExited(e -> errorLabel.setText(""));
-					
-				anchorPane.getChildren().addAll(image,imageLabel);
+					row.setOnContextMenuRequested(ev -> {
 
-				ev.consume();
-			});
-			row.setOnMouseDragged(evt -> {
-				image.setX(evt.getSceneX() - 40);
-				image.setY(evt.getSceneY() - 20);
-				
-				//imageLabel.setX(evt.getSceneX() - 40);
-				//imageLabel.setY(evt.getSceneY() - 20);
-				
-				imageLabel.setTranslateX(image.getX()+14);
-				imageLabel.setTranslateY(image.getY() - 15);
-			});
+					});
+					row.setOnDragDetected(ev -> {
 
-			return row;
-		});
+						String name = row.getItem().getName();
+						String rowInfo = row.getText();
+						Dragboard db = row.startDragAndDrop(TransferMode.COPY);
+						ClipboardContent content = new ClipboardContent();
+						content.putString(rowInfo);
+						db.setContent(content);
+
+						imageLabel.setText(name);
+						imageLabel.setTextFill(Paint.valueOf("red"));
+						imageLabel.setStyle("-fx-font-family:Times New Roman Bold");
+						
+						image.toFront();
+						image.setVisible(true);
+
+						imageLabel.setTranslateX(image.getX() + 14);
+						imageLabel.setTranslateY(image.getY() - 15);
+						image.setX(ev.getSceneX() - 40);
+						image.setY(ev.getSceneY() - 20);
+
+						image.setOnMouseDragged(evt -> {
+							image.setX(evt.getSceneX() - 40);
+							image.setY(evt.getSceneY() - 20);
+
+							imageLabel.setTranslateX(image.getX() + 14);
+							imageLabel.setTranslateY(image.getY() - 15);
+							tribe_tableView.getSelectionModel().select(
+									row.getIndex());
+							setSelectedTribe(getTribeService().getTribeById(
+									row.getIndex() + 1));
+							
+
+							evt.consume();
+						});
+						image.setOnMouseReleased(evt -> {
+							setAddressOfImage("" + image.getX() + ","
+									+ image.getY());
+
+							setSpecialTribe(getSelectedTribe());
+							getSpecialTribe().setAddress(getAddressOfImage());
+
+							getTribeService().saveTribe(getSpecialTribe());
+							showTribeTable();
+							evt.consume();
+						});
+						image.setOnContextMenuRequested(e -> {
+
+							destroyPin(image, imageLabel);
+							e.consume();
+						});
+
+						image.setOnMouseEntered(e -> {
+
+							errorLabel
+									.setText(row.getItem().getName()
+											+ " imlecini kaldýrmak için SAÐ MOUSE tuþuna basýnýz!");
+							e.consume();
+						});
+						image.setOnMouseExited(e -> errorLabel.setText(""));
+
+						anchorPane.getChildren().addAll(image, imageLabel);
+
+						ev.consume();
+					});
+					row.setOnMouseDragged(evt -> {
+						image.setX(evt.getSceneX() - 40);
+						image.setY(evt.getSceneY() - 20);
+
+						imageLabel.setTranslateX(image.getX() + 14);
+						imageLabel.setTranslateY(image.getY() - 15);
+
+						evt.consume();
+					});
+					row.setOnMouseReleased(evt -> {
+						setAddressOfImage("" + image.getX() + ","
+								+ image.getY());
+
+						setSelectedTribe(getTribeService().getTribeById(
+								row.getIndex() + 1));
+
+						setSpecialTribe(getSelectedTribe());
+						getSpecialTribe().setAddress(getAddressOfImage());
+
+						getTribeService().saveTribe(getSpecialTribe());
+						showTribeTable();
+						evt.consume();
+					});
+
+					return row;
+				});
 
 		personId.setCellValueFactory(new PropertyValueFactory<Person, Integer>(
 				"id"));
@@ -300,6 +345,8 @@ public class DemoPageFXMLController implements Initializable {
 		numberOfPeople
 				.setCellValueFactory(new PropertyValueFactory<Tribe, Integer>(
 						"numberOfPeople"));
+		address.setCellValueFactory(new PropertyValueFactory<Tribe, String>(
+				"address"));
 
 		showTribeTable();
 
@@ -375,14 +422,12 @@ public class DemoPageFXMLController implements Initializable {
 	public ImageView createPin() {
 		ImageView pinImage = new ImageView();
 		pinImage.setImage(new Image("pin.png"));
-		// pinImage.setScaleX(2);
-		// pinImage.setScaleY(3);
 		pinImage.setFitHeight(55);
 		pinImage.setFitWidth(55);
 		return pinImage;
 	}
 
-	public void destroyPin(ImageView destroyedPin,Label imageLabel) {
+	public void destroyPin(ImageView destroyedPin, Label imageLabel) {
 		anchorPane.getChildren().remove(destroyedPin);
 		anchorPane.getChildren().remove(imageLabel);
 	}
@@ -417,6 +462,14 @@ public class DemoPageFXMLController implements Initializable {
 
 	public void setStage(Stage stage) {
 		this.stage = stage;
+	}
+
+	public String getAddressOfImage() {
+		return addressOfImage;
+	}
+
+	public void setAddressOfImage(String addressOfImage) {
+		this.addressOfImage = addressOfImage;
 	}
 
 }

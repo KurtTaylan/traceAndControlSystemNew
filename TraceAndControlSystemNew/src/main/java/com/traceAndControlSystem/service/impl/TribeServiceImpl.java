@@ -56,4 +56,15 @@ public class TribeServiceImpl implements TribeService {
 		return getTribeDao().getNumberOfTribeMember(tribeName);
 	}
 
+	@Transactional
+	public void saveAddress(String address) {
+		getTribeDao().saveAddress(address);
+		
+	}
+
+	@Transactional
+	public Tribe getTribeById(int id) {
+		return getTribeDao().getTribeById(id);
+	}
+
 }

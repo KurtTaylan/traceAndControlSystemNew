@@ -2,8 +2,6 @@ package com.traceAndControlSystem.dao.impl;
 
 import java.util.List;
 
-import javafx.beans.property.IntegerProperty;
-
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -33,7 +31,7 @@ public class TribeDaoImpl implements TribeDao {
 	}
 
 	public void saveTribe(Tribe tribe) {
-		getSessionFactory().getCurrentSession().persist(tribe);
+		getSessionFactory().getCurrentSession().saveOrUpdate(tribe);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -60,6 +58,21 @@ public class TribeDaoImpl implements TribeDao {
 		Tribe tribe = (Tribe) criteria.uniqueResult();
 		List<Person> pl = tribe.getPersonList();
 		return pl.size();
+	}
+
+	@Override
+	public void saveAddress(String address) {
+		getSessionFactory().getCurrentSession().saveOrUpdate(address);
+		
+	}
+
+	@Override
+	public Tribe getTribeById(int id) {
+		Criteria criteria = getSessionFactory().getCurrentSession()
+				.createCriteria(Tribe.class);
+		criteria.add(Restrictions.eq("id", id));
+		Tribe tribe = (Tribe) criteria.uniqueResult();
+		return tribe;
 	}
 
 }

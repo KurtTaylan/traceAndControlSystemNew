@@ -15,5 +15,8 @@ public interface TribeDao {
 	 List<Tribe> listTribe();
 	 
 	 int getNumberOfTribeMember(String tribeName);
-
+	 
+	 void saveAddress(String address);
+	 
+	 Tribe getTribeById(int id);
 }

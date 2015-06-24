@@ -22,6 +22,7 @@ public class Tribe implements java.io.Serializable {
 	private String name;
 	private List<Person> personList;
 	private int numberOfPeople;
+	private String address;
 
 	public Tribe() {
 	}
@@ -67,6 +68,15 @@ public class Tribe implements java.io.Serializable {
 
 	public void setNumberOfPeople(int numberOfPeople) {
 		this.numberOfPeople = numberOfPeople;
+	}
+
+	@Column(name = "address", nullable = true)
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 }
