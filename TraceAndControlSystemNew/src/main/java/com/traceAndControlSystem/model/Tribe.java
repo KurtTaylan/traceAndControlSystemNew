@@ -27,8 +27,10 @@ public class Tribe implements java.io.Serializable {
 	public Tribe() {
 	}
 
-	public Tribe(String name) {
+	public Tribe(String name, int numberOfPeople, String address) {
 		this.name = name;
+		this.numberOfPeople = numberOfPeople;
+		this.address = address;
 	}
 
 	@Id

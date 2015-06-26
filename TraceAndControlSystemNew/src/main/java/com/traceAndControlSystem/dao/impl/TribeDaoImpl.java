@@ -63,7 +63,7 @@ public class TribeDaoImpl implements TribeDao {
 	@Override
 	public void saveAddress(String address) {
 		getSessionFactory().getCurrentSession().saveOrUpdate(address);
-		
+
 	}
 
 	@Override

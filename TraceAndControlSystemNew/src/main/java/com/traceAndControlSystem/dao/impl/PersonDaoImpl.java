@@ -13,34 +13,37 @@ import com.traceAndControlSystem.model.Tribe;
 public class PersonDaoImpl implements PersonDao {
 
 	private SessionFactory sessionFactory;
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Person> listPersonsByTribeNumber(Tribe tribeNumber) {
-		Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Person.class);
-        criteria.add(Restrictions.eq("tribe",tribeNumber));
-        return (List<Person>)criteria.list();
+		Criteria criteria = getSessionFactory().getCurrentSession()
+				.createCriteria(Person.class);
+		criteria.add(Restrictions.eq("tribe", tribeNumber));
+		return (List<Person>) criteria.list();
 	}
 
 	public Person findPersonById(String Id) {
-		Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Person.class);
-        criteria.add(Restrictions.eq("personId",Id));
-        return (Person)criteria.uniqueResult();
+		Criteria criteria = getSessionFactory().getCurrentSession()
+				.createCriteria(Person.class);
+		criteria.add(Restrictions.eq("personId", Id));
+		return (Person) criteria.uniqueResult();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Person> listPersons() {
-		Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Person.class);
-        return (List<Person>) criteria.list();
+		Criteria criteria = getSessionFactory().getCurrentSession()
+				.createCriteria(Person.class);
+		return (List<Person>) criteria.list();
 	}
 
 	public void savePerson(Person person) {
 		getSessionFactory().getCurrentSession().save(person);
-		
+
 	}
 
 	public void saveTribe(Tribe tribe) {
 		getSessionFactory().getCurrentSession().save(tribe);
-		
+
 	}
 
 	public SessionFactory getSessionFactory() {

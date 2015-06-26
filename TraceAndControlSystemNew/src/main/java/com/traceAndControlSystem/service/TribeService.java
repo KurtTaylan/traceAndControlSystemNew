@@ -17,7 +17,7 @@ public interface TribeService {
 	 
 	 int getNumberOfTribeMember(String tribeName);
 	 
-	 void saveAddress(String address);
-	 
-	 Tribe getTribeById(int id);
+	void saveAddress(String address);
+
+	Tribe getTribeById(int id);
 }

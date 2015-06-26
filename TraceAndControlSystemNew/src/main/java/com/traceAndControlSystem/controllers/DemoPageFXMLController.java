@@ -1,8 +1,6 @@
 package com.traceAndControlSystem.controllers;
 
-import java.awt.Font;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -12,20 +10,18 @@ import com.traceAndControlSystem.model.Person;
 import com.traceAndControlSystem.model.Tribe;
 import com.traceAndControlSystem.service.PersonService;
 import com.traceAndControlSystem.service.TribeService;
-import com.traceAndControlSystem.service.impl.TribeServiceImpl;
 
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
+
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
+
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
+
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -34,15 +30,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.InputEvent;
+
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.PickResult;
+
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 public class DemoPageFXMLController implements Initializable {
 
@@ -115,101 +110,6 @@ public class DemoPageFXMLController implements Initializable {
 
 	}
 
-	/* DRAG AND DROP */
-	public void dragAndDropSource(final TableView<Tribe> source) {
-
-		source.setOnDragDetected(new EventHandler<MouseEvent>() {
-			public void handle(MouseEvent event) {
-
-				/* drag was detected, start a drag-and-drop gesture */
-				/* allow any transfer mode */
-				Dragboard db = source.startDragAndDrop(TransferMode.ANY);
-
-				/* Put a string on a dragboard */
-				ClipboardContent content = new ClipboardContent();
-				content.putString(source.getSelectionModel().getSelectedCells()
-						.toString());
-				db.setContent(content);
-
-				event.consume();
-			}
-		});
-
-		source.setOnDragDone(new EventHandler<DragEvent>() {
-			public void handle(DragEvent event) {
-				/* the drag and drop gesture ended */
-				/* if the data was successfully moved, clear it */
-				if (event.getTransferMode() == TransferMode.MOVE) {
-					// source.setText("");
-				}
-
-				event.consume();
-			}
-		});
-
-	}
-
-	public void dragAndDropTarget(final ImageView target) {
-		target.setOnDragOver(new EventHandler<DragEvent>() {
-			public void handle(DragEvent event) {
-
-				/* data is dragged over the target */
-				/*
-				 * accept it only if it is not dragged from the same node and if
-				 * it has a string data
-				 */
-				if (event.getGestureSource() != target
-						&& event.getDragboard().hasString()) {
-
-					/* allow for both copying and moving, whatever user chooses */
-					event.acceptTransferModes(TransferMode.ANY);
-				}
-				event.consume();
-			}
-		});
-
-		target.setOnDragEntered(new EventHandler<DragEvent>() {
-			public void handle(DragEvent event) {
-				/* the drag-and-drop gesture entered the target */
-				/* show to the user that it is an actual gesture target */
-				if (event.getGestureSource() != target
-						&& event.getDragboard().hasString()) {
-
-				}
-				event.consume();
-			}
-		});
-
-		target.setOnDragExited(new EventHandler<DragEvent>() {
-			public void handle(DragEvent event) {
-				/* mouse moved away, remove the graphical cues */
-
-				event.consume();
-			}
-		});
-
-		target.setOnDragDropped(new EventHandler<DragEvent>() {
-			public void handle(DragEvent event) {
-				/* data dropped */
-				/* if there is a string data on dragboard, read it and use it */
-				Dragboard db = event.getDragboard();
-				boolean success = false;
-				if (db.hasString()) {
-					success = true;
-					// target.setText(target.getText() + "\n" + db.getString());
-				}
-				/*
-				 * let the source know whether the string was successfully
-				 * transferred and used
-				 */
-				event.setDropCompleted(success);
-
-				event.consume();
-			}
-		});
-
-	}
-
 	/* Starters */
 	private void initAll() {
 		initSpring();
@@ -234,8 +134,7 @@ public class DemoPageFXMLController implements Initializable {
 					setSpecialTribe(getSelectedTribe());
 					ImageView image = createPin();
 					Label imageLabel = new Label();
-					
-					
+
 					row.setOnContextMenuRequested(ev -> {
 
 					});
@@ -250,8 +149,9 @@ public class DemoPageFXMLController implements Initializable {
 
 						imageLabel.setText(name);
 						imageLabel.setTextFill(Paint.valueOf("red"));
-						imageLabel.setStyle("-fx-font-family:Times New Roman Bold");
-						
+						imageLabel
+								.setStyle("-fx-font-family:Times New Roman Bold");
+
 						image.toFront();
 						image.setVisible(true);
 
@@ -270,7 +170,6 @@ public class DemoPageFXMLController implements Initializable {
 									row.getIndex());
 							setSelectedTribe(getTribeService().getTribeById(
 									row.getIndex() + 1));
-							
 
 							evt.consume();
 						});
@@ -278,10 +177,17 @@ public class DemoPageFXMLController implements Initializable {
 							setAddressOfImage("" + image.getX() + ","
 									+ image.getY());
 
-							setSpecialTribe(getSelectedTribe());
-							getSpecialTribe().setAddress(getAddressOfImage());
+							if ((image.getX() != 0.0 & image.getX() < 1000)
+									& image.getY() != 0.0) {
+								setSelectedTribe(getTribeService()
+										.getTribeById(row.getIndex() + 1));
 
-							getTribeService().saveTribe(getSpecialTribe());
+								setSpecialTribe(getSelectedTribe());
+								getSpecialTribe().setAddress(
+										getAddressOfImage());
+
+								getTribeService().saveTribe(getSpecialTribe());
+							}
 							showTribeTable();
 							evt.consume();
 						});
@@ -316,14 +222,16 @@ public class DemoPageFXMLController implements Initializable {
 					row.setOnMouseReleased(evt -> {
 						setAddressOfImage("" + image.getX() + ","
 								+ image.getY());
+						if ((image.getX() != 0.0 & image.getX() < 1000)
+								& image.getY() != 0.0) {
+							setSelectedTribe(getTribeService().getTribeById(
+									row.getIndex() + 1));
 
-						setSelectedTribe(getTribeService().getTribeById(
-								row.getIndex() + 1));
+							setSpecialTribe(getSelectedTribe());
+							getSpecialTribe().setAddress(getAddressOfImage());
 
-						setSpecialTribe(getSelectedTribe());
-						getSpecialTribe().setAddress(getAddressOfImage());
-
-						getTribeService().saveTribe(getSpecialTribe());
+							getTribeService().saveTribe(getSpecialTribe());
+						}
 						showTribeTable();
 						evt.consume();
 					});

@@ -10,7 +10,7 @@ import com.traceAndControlSystem.model.Tribe;
 import com.traceAndControlSystem.service.PersonService;
 
 public class PersonServiceImpl implements PersonService {
-	
+
 	private PersonDao personDao;
 
 	public PersonDao getPersonDao() {
@@ -20,30 +20,35 @@ public class PersonServiceImpl implements PersonService {
 	public void setPersonDao(PersonDao personDao) {
 		this.personDao = personDao;
 	}
+
 	@Transactional
 	public List<Person> listPersonsByTribeNumber(Tribe tribeNumber) {
-		
+
 		return getPersonDao().listPersonsByTribeNumber(tribeNumber);
 	}
+
 	@Transactional
 	public Person findPersonById(String Id) {
-		
+
 		return getPersonDao().findPersonById(Id);
 	}
+
 	@Transactional
 	public List<Person> listPersons() {
-		
+
 		return getPersonDao().listPersons();
 	}
+
 	@Transactional
 	public void savePerson(Person person) {
 		getPersonDao().savePerson(person);
-		
+
 	}
+
 	@Transactional
 	public void saveTribe(Tribe tribe) {
 		getPersonDao().saveTribe(tribe);
-		
+
 	}
 
 }

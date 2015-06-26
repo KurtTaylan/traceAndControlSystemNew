@@ -29,8 +29,8 @@ public class MainApp extends Application {
 
 	public void gotoDemoPage() {
 		try {
-			DemoPageFXMLController demo = 
-					(DemoPageFXMLController) replaceSceneContent("/fxml/DemoPageFXML.fxml","Trace And Control System");
+			DemoPageFXMLController demo = (DemoPageFXMLController) replaceSceneContent(
+					"/fxml/DemoPageFXML.fxml", "Trace And Control System");
 			demo.setStage(stage);
 		} catch (Exception ex) {
 
@@ -38,7 +38,8 @@ public class MainApp extends Application {
 		}
 	}
 
-	private Initializable replaceSceneContent(String fxml,String text) throws Exception {
+	private Initializable replaceSceneContent(String fxml, String text)
+			throws Exception {
 
 		FXMLLoader loader = new FXMLLoader();
 		InputStream in = MainApp.class.getResourceAsStream(fxml);
@@ -54,8 +55,7 @@ public class MainApp extends Application {
 		stage.setScene(scene);
 		stage.setTitle(text);
 		stage.sizeToScene();
-		
-		
+
 		return (Initializable) loader.getController();
 	}
 }
